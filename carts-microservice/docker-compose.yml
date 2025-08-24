@@ -1,10 +1,15 @@
 version: '2'
+name: cart-service
 
 services:
   cart:
+    environment:
+      SERVER_PORT: ${SERVER_PORT}
+      SPRING_DATA_MONGODB_URI: ${SPRING_DATA_MONGODB_URI}
+
     image: hizem20/cart:1.0
     ports:
-      - "8081:8081"
+      - "8082:8082"
     networks:
       - cart-network
     
@@ -12,6 +17,20 @@ services:
     image: mongodb/mongodb-community-server
     ports:
       - "27017:27017"
+    networks:
+      - cart-network
+  
+  mongo-express:
+    image: mongo-express
+    ports:
+      - "8081:8081"
+    networks:
+      - cart-network
+    environment:
+      - ME_CONFIG_MONGODB_SERVER=mongo
 
 networks:
   cart-network:
+    driver: bridge
+    driver_opts:
+      com.docker.network.bridge.enable_icc: "true"
