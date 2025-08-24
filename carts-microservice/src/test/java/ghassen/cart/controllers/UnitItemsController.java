@@ -29,6 +29,12 @@ public class UnitItemsController {
     @Autowired
     private CartsController cartsController;
 
+    /**
+     * Verifies that adding a new Item to a customer's cart creates a single cart entry containing that item.
+     *
+     * Creates an Item and adds it via ItemsController.addToCart, then asserts the customer's cart
+     * contains exactly one element and that element equals the added Item.
+     */
     @Test
     public void whenNewItemAdd() {
         Item item = new Item("id", "itemId", 1, 0F);
@@ -38,6 +44,13 @@ public class UnitItemsController {
         assertThat(itemsController.getItems(customerId), is(org.hamcrest.CoreMatchers.hasItem(item)));
     }
 
+    /**
+     * Verifies that adding the same item twice to a customer's cart results in a single cart entry
+     * and increments the stored item quantity.
+     *
+     * The test adds the same Item twice for a given customer, then asserts the cart contains exactly
+     * one entry for that item and that the persisted item's quantity equals 2.
+     */
     @Test
     public void whenExistIncrementQuantity() {
         Item item = new Item("id", "itemId", 1, 0F);
@@ -49,6 +62,12 @@ public class UnitItemsController {
         assertThat(itemDAO.findOne(item.id()).quantity(), is(equalTo(2)));
     }
 
+    /**
+     * Verifies that removing an item by its itemId deletes it from the customer's cart.
+     *
+     * Adds a single item to a cart, asserts the cart contains one entry, removes the item,
+     * and then asserts the cart is empty.
+     */
     @Test
     public void shouldRemoveItemFromCart() {
         Item item = new Item("id", "itemId", 1, 0F);
@@ -59,6 +78,12 @@ public class UnitItemsController {
         assertThat(itemsController.getItems(customerId), is(hasSize(0)));
     }
 
+    /**
+     * Verifies that updating an item's quantity via ItemsController changes the stored item's quantity.
+     *
+     * Creates an item, adds it to a customer's cart, confirms the initial quantity, updates the item with a
+     * new quantity using ItemsController.updateItem, and asserts the ItemDAO reflects the updated quantity.
+     */
     @Test
     public void shouldSetQuantity() {
         Item item = new Item("id", "itemId", 1, 0F);
@@ -72,21 +97,45 @@ public class UnitItemsController {
 
     @Configuration
     static class ItemsControllerTestConfiguration {
+        /**
+         * Test bean that instantiates and exposes a fresh ItemsController for the Spring test context.
+         *
+         * @return a new ItemsController instance used by tests
+         */
         @Bean
         public ItemsController itemsController() {
             return new ItemsController();
         }
 
+        /**
+         * Creates a CartsController bean for the test application context.
+         *
+         * @return a new CartsController instance
+         */
         @Bean
         public CartsController cartsController() {
             return new CartsController();
         }
 
+        /**
+         * Provides an in-memory fake ItemDAO for tests.
+         *
+         * Returns a new ItemDAO.Fake instance that simulates item persistence for unit tests without external dependencies.
+         *
+         * @return a fresh ItemDAO.Fake used by the test context
+         */
         @Bean
         public ItemDAO itemDAO() {
             return new ItemDAO.Fake();
         }
 
+        /**
+         * Provides a test double implementation of CartDAO as a Spring bean.
+         *
+         * <p>Used by the test application context to supply an in-memory/fake cart repository.
+         *
+         * @return a new instance of {@code CartDAO.Fake}
+         */
         @Bean
         public CartDAO cartDAO() {
             return new CartDAO.Fake();

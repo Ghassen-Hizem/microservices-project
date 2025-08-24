@@ -63,6 +63,13 @@ public class UnitCartResource {
         assertThat(cartResource.contents().get().contents().get(), is(empty()));
     }
 
+    /**
+     * Verifies that merging one cart into another combines their items into the target cart.
+     *
+     * Creates two carts (each with a single distinct item), merges the second into the first, and asserts that:
+     * - the target cart contains both items (order is not significant), and
+     * - the source cart still contains its original item.
+     */
     @Test
     public void mergedItemsShouldBeInCart() {
         String person1 = "person1";
