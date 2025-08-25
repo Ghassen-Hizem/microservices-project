@@ -31,7 +31,7 @@ public class UnitItemsController {
 
     @Test
     public void whenNewItemAdd() {
-        Item item = new Item("id", "itemId", 1, 0F);
+        Item item = new Item("idAdd", "itemId", 1, 0F);
         String customerId = "customerIdAdd";
         itemsController.addToCart(customerId, item);
         assertThat(itemsController.getItems(customerId), is(hasSize(1)));
@@ -40,7 +40,7 @@ public class UnitItemsController {
 
     @Test
     public void whenExistIncrementQuantity() {
-        Item item = new Item("id", "itemId", 1, 0F);
+        Item item = new Item("idInc", "itemId", 1, 0F);
         String customerId = "customerIdIncrement";
         itemsController.addToCart(customerId, item);
         itemsController.addToCart(customerId, item);
@@ -51,7 +51,7 @@ public class UnitItemsController {
 
     @Test
     public void shouldRemoveItemFromCart() {
-        Item item = new Item("id", "itemId", 1, 0F);
+        Item item = new Item("idRemove", "itemId", 1, 0F);
         String customerId = "customerIdRemove";
         itemsController.addToCart(customerId, item);
         assertThat(itemsController.getItems(customerId), is(hasSize(1)));
@@ -61,7 +61,7 @@ public class UnitItemsController {
 
     @Test
     public void shouldSetQuantity() {
-        Item item = new Item("id", "itemId", 1, 0F);
+        Item item = new Item("idQty", "itemId", 1, 0F);
         String customerId = "customerIdQuantity";
         itemsController.addToCart(customerId, item);
         assertThat(itemsController.getItems(customerId).get(0).quantity(), is(equalTo(item.quantity())));
