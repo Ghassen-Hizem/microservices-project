@@ -1,5 +1,9 @@
 FROM eclipse-temurin:21
 
+LABEL vendor="Ghassen Hizem"
+LABEL description="a microservice spring application that represents a Cart in an e-commerce app"
+LABEL version="1.0"
+
 WORKDIR /cart-microservice
 
 COPY target/carts.jar app.jar
