@@ -43,6 +43,12 @@ public class UnitCartsController {
         assertThat(cartDAO.findByCustomerId(customerId).get(0), is(equalTo(cart)));
     }
 
+    /**
+     * Verifies that deleting a cart by customerId removes it from persistent storage.
+     *
+     * Creates and saves a Cart for a customerId, invokes CartsController.delete(customerId),
+     * and asserts the CartDAO no longer returns any carts for that customer.
+     */
     @Test
     public void shouldDeleteCart() {
         String customerId = "customerIdGet";
@@ -73,21 +79,47 @@ public class UnitCartsController {
 
     @Configuration
     static class ItemsControllerTestConfiguration {
+        /**
+         * Spring test bean that provides a new ItemsController instance.
+         *
+         * <p>Used to wire an ItemsController into the test application context.
+         *
+         * @return a new ItemsController instance
+         */
         @Bean
         public ItemsController itemsController() {
             return new ItemsController();
         }
 
+        /**
+         * Creates and exposes a CartsController bean for the test Spring context.
+         *
+         * Used by the nested test configuration to inject a standalone CartsController instance into tests.
+         *
+         * @return a new CartsController instance
+         */
         @Bean
         public CartsController cartsController() {
             return new CartsController();
         }
 
+        /**
+         * Provides a test double implementation of ItemDAO for the Spring test context.
+         *
+         * @return an in-memory {@link ItemDAO} fake used by unit tests
+         */
         @Bean
         public ItemDAO itemDAO() {
             return new ItemDAO.Fake();
         }
 
+        /**
+         * Provides a test {@code CartDAO} implementation backed by an in-memory fake.
+         *
+         * <p>Used to inject a deterministic, ephemeral cart data store for unit tests.
+         *
+         * @return a new instance of {@link CartDAO.Fake} suitable for testing
+         */
         @Bean
         public CartDAO cartDAO() {
             return new CartDAO.Fake();

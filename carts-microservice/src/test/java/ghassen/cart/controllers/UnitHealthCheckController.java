@@ -32,11 +32,24 @@ public class UnitHealthCheckController {
 
     @Configuration
     static class HealthCheckControllerTestConfiguration {
+        /**
+         * Creates and exposes a HealthCheckController bean for the test Spring context.
+         *
+         * @return a new HealthCheckController instance
+         */
         @Bean
         public HealthCheckController healthCheckController() {
             return new HealthCheckController();
         }
 
+        /**
+         * Provides a Mockito-mocked MongoTemplate for the test application context.
+         *
+         * <p>Used to satisfy HealthCheckController's dependency on a MongoTemplate without
+         * connecting to a real MongoDB instance.
+         *
+         * @return a Mockito mock of {@link org.springframework.data.mongodb.core.MongoTemplate}
+         */
         @Bean
         public MongoTemplate mongoTemplate() {
             MongoTemplate mongoTemplate = mock(MongoTemplate.class);
