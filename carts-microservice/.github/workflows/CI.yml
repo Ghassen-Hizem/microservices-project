@@ -1,0 +1,11 @@
+name: Continuous Integration (CI) pipeline of the Cart microservice
+
+on:
+    pull_request:
+        types: [opened, reopened, edited]
+jobs:
+    first_job:
+        runs-on: ubuntu-latest
+        steps:
+            - run: echo "hello world"
+
